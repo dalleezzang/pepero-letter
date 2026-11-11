@@ -52,7 +52,7 @@ $('#save').onclick=async()=>{try{const file=await getFile();if(file){download(fi
 function createShareURL(){const data={v:1,m:$('#message').value,f:state.flavor,w:state.wrap,b:state.box,t:$('#to').value,r:$('#from').value};const bytes=new TextEncoder().encode(JSON.stringify(data));let raw='';bytes.forEach(b=>raw+=String.fromCharCode(b));return location.origin+location.pathname+'#letter='+btoa(raw).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');}
 async function copyShareLink(){try{await navigator.clipboard.writeText($('#share-url').value);toast('공유 링크를 복사했어요.');}catch{$('#share-url').focus();$('#share-url').select();toast('링크를 선택했어요. 복사해서 보내주세요.');}}
 $('#copy-url').onclick=copyShareLink;
-$('#share').onclick=async()=>{if(!$('#message').value.trim())return;const url=createShareURL();$('#share-url').value=url;$('#preview-link').href=url;$('#share-result').hidden=false;if(navigator.share){try{await navigator.share({title:'빼빼로 편지',url});}catch(e){if(e.name!=='AbortError')await copyShareLink();}}else await copyShareLink();};
+$('#share').onclick=async()=>{if(!$('#message').value.trim())return;const url=createShareURL();$('#share-url').value=url;$('#preview-link').href=url;$('#share-result').hidden=false;if(navigator.share){try{await navigator.share({title:'빼빼로 편지가 도착했어요',url});}catch(e){if(e.name!=='AbortError')await copyShareLink();}}else await copyShareLink();};
 
 render();
 

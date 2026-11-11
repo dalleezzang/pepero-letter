@@ -1,5 +1,19 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#faf7ef"><title>빼빼로 편지</title><link rel="stylesheet" href="style.css"></head>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#faf7ef"><title>빼빼로 편지</title><link rel="stylesheet" href="style.css">
+<meta name="description" content="빼빼로 편지가 도착했어요. 상자를 열어 마음을 확인해 보세요.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="빼빼로 편지">
+<meta property="og:title" content="빼빼로 편지가 도착했어요">
+<meta property="og:description" content="상자를 열어 마음을 확인해 보세요.">
+<meta property="og:image" content="https://dalleezzang.github.io/pepero-letter/share-preview.png">
+<meta property="og:image:width" content="1734">
+<meta property="og:image:height" content="907">
+<meta property="og:image:alt" content="빼빼로 편지가 도착했어요 — 분홍 리본으로 묶인 빼빼로 선물 상자">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="빼빼로 편지가 도착했어요">
+<meta name="twitter:description" content="상자를 열어 마음을 확인해 보세요.">
+<meta name="twitter:image" content="https://dalleezzang.github.io/pepero-letter/share-preview.png">
+</head>
 <body><header><a class="brand" href="./"><img class="brand-mark" src="pepero-heart.png" alt="" width="46" height="46"> 빼빼로 편지</a><a href="./" class="make-own">나도 만들기 ↗</a></header>
 <main>
 <section class="studio"><div class="preview-column"><div class="send-fields"><label>받는 사람<input id="to" maxlength="12" placeholder="입력" aria-label="받는 사람"></label><label>보내는 사람<input id="from" maxlength="12" placeholder="입력" aria-label="보내는 사람"></label></div><div class="card-wrap"><button id="open-letter" type="button"><span>클릭해서 열기</span></button><div id="empty-state">눌러서 마음을 써보세요</div><span id="name-to" class="scene-signature"></span><span id="name-from" class="scene-signature"></span><textarea id="message" class="card-input" maxlength="24" aria-label="카드에 문구 입력" spellcheck="false" autofocus></textarea><canvas id="card" width="1200" height="1200" role="img" aria-label="입력한 글자를 빼빼로 획으로 그린 카드"></canvas><div id="flight-layer" aria-hidden="true"></div><div id="snack-box" aria-hidden="true"><div class="box-lid"></div><div class="box-sticks"><i></i><i></i><i></i></div><div class="box-front"><span>빼빼로</span><b>Ⅱ</b><small>♥</small></div></div></div><div class="received-actions" id="received-actions"><button id="replay" class="secondary">↻ 다시 보기</button></div></div>

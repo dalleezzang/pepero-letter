@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {BOX_STYLES} from './box-styles.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 
-export function createScene(host,{introScale=3.05}={}){
+export function createScene(host,{introScale=3.4}={}){
  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(host.clientWidth,host.clientWidth);renderer.setClearColor(0xffffff);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.domElement.id='three-view';host.prepend(renderer.domElement);
  const scene=new THREE.Scene();scene.background=new THREE.Color('white');const camera=new THREE.OrthographicCamera(-600,600,600,-600,1,5000);camera.position.set(0,-220,1600);camera.lookAt(0,0,0);

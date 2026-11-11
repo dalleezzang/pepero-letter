@@ -69,3 +69,7 @@ body:not(.received) #toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 /* Prevent double-tap zoom while retaining scrolling and pinch zoom. */
 html,body,button,a,input,textarea,canvas,.card-wrap,.box-parcel{touch-action:manipulation}
 @media(max-width:800px){.send-fields input{font-size:16px}.share-link-row input{font-size:16px}}
+
+header>.make-own{display:none}.received header{height:72px;display:flex;justify-content:space-between;gap:16px}.received header>.make-own{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:600;padding:10px 14px;border:1px solid #e7dcd2;border-radius:24px;background:#fff;color:#79533f}.received header>.make-own:hover{background:#faf5ee}
+body.received.awaiting-letter{height:100svh;overflow:hidden}.received.awaiting-letter main{height:calc(100svh - 72px);max-width:none;padding:0 16px 16px;display:grid;place-items:center}.received.awaiting-letter .studio{width:100%}.received.awaiting-letter .preview-column{width:min(100%,calc(100svh - 96px));max-width:680px;margin:0 auto}.received.awaiting-letter .received-actions{display:none}.received.awaiting-letter .card-wrap{width:100%;aspect-ratio:1}.awaiting-letter #open-letter span{top:90%;padding:13px 26px}
+@media(max-width:480px){.received header{height:64px;padding:0 16px}.received header .brand{font-size:16px;gap:6px}.received header>.make-own{font-size:11px;padding:9px 11px}.received.awaiting-letter main{height:calc(100svh - 64px)}.received.awaiting-letter .preview-column{width:min(100%,calc(100svh - 88px))}}

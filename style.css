@@ -93,3 +93,6 @@ body.received.awaiting-letter{height:100svh;overflow:hidden}.received.awaiting-l
  body:not(.received).keyboard-open .studio>aside{padding-bottom:10px}
  body:not(.received) #toast{bottom:calc(var(--keyboard-inset,0px) + 88px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Select the received view before the module and WebGL assets load. */
+body.letter-loading main{visibility:hidden}

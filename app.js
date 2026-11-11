@@ -107,7 +107,7 @@ $('#open-letter').onclick=playLetter;
 $('#replay').onclick=prepareLetter;
 function loadReceivedLetter(){if(!location.hash.startsWith('#letter='))return;try{const raw=location.hash.slice(8).replaceAll('-','+').replaceAll('_','/');if(raw.length>3000)throw Error('long');const data=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw),c=>c.charCodeAt(0))));if(data.v!==1||typeof data.m!=='string'||!data.m.trim()||data.m.length>24)throw Error('invalid');
  $('#message').value=data.m;$('#message').disabled=true;$('#to').value=typeof data.t==='string'?data.t.slice(0,12):'';$('#from').value=typeof data.r==='string'?data.r.slice(0,12):'';state.flavor='almond';state.box=BOX_STYLES[data.b]?data.b:'green';view3D?.setBoxStyle(state.box);state.wrap=['yellow','pink','kraft'].includes(data.w)?data.w:'yellow';document.body.classList.add('received');$('#snack-box').dataset.flavor=state.flavor;document.title='너에게 온 빼빼로 편지';render();prepareLetter();
- }catch{toast('편지 링크를 읽지 못했어요. 링크 전체를 확인해주세요.');}}
+ }catch{document.body.classList.remove('received','awaiting-letter');document.title='빼빼로 편지';$('#message').disabled=false;render();toast('편지 링크를 읽지 못했어요. 링크 전체를 확인해주세요.');}finally{document.body.classList.remove('letter-loading');}}
 loadReceivedLetter();
 
 function artwork(){if(!view3D)return canvas;view3D.draw();const out=document.createElement('canvas');out.width=1200;out.height=canvas.height;const c=out.getContext('2d');c.drawImage(view3D.canvas,0,0,1200,canvas.height);c.textAlign='center';c.fillStyle='#9c7e64';c.font='19px sans-serif';if($('#to').value.trim())c.fillText('TO. '+$('#to').value.trim(),600,letterLayout.toY);if($('#from').value.trim())c.fillText('FROM. '+$('#from').value.trim(),600,letterLayout.fromY);return out;}

@@ -65,3 +65,7 @@ body:not(.received) #toast{bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 .bow-gem{left:44%;top:28%;width:14%;height:34%;transform:translateZ(10px)}.gem-drop{left:45%;top:105%;width:13%;height:35%}[data-box="gothic"] .raised-bow .gem-chain{display:block!important;left:50%;top:62%;height:47%;width:2px;border:0;background:#dac7d8;box-shadow:none}
 .raised-heart{position:absolute;color:#ec6798;font-size:26px;font-style:normal;text-shadow:0 1px #fff1f7,1px 3px 2px #90234a66;transform:translateZ(4px) rotate(-12deg)}.h1{left:8%;top:17%}.h2{right:8%;top:12%;font-size:18px;transform:rotate(15deg)}.h3{right:7%;top:53%;font-size:20px}[data-box="gothic"] .raised-heart{display:none}
 .bow-loop.left{transform:translateZ(18px) rotate(18deg) rotateY(-22deg)}.bow-loop.right{transform:translateZ(18px) rotate(-18deg) rotateY(22deg)}.raised-bow .bow-knot{transform:translateZ(24px)}.bow-gem{transform:translateZ(26px)}
+
+/* Prevent double-tap zoom while retaining scrolling and pinch zoom. */
+html,body,button,a,input,textarea,canvas,.card-wrap,.box-parcel{touch-action:manipulation}
+@media(max-width:800px){.send-fields input{font-size:16px}.share-link-row input{font-size:16px}}

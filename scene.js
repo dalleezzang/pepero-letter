@@ -39,7 +39,7 @@ export function createScene(host,{introScale=3.05}={}){
  }
  function disposeRod(g){g.traverse(o=>{if(o.isMesh&&!['SphereGeometry','DodecahedronGeometry'].includes(o.geometry.type))o.geometry.dispose();});cluster.remove(g);}
  function draw(){renderer.render(scene,camera);}
- function update(strokes,flavor,height=1200){const k=JSON.stringify(strokes)+flavor+height;if(k===currentKey){draw();return;}currentKey=k;currentFlavor=flavor;sheetHeight=height;camera.top=frameHeight()/2;camera.bottom=-frameHeight()/2;camera.updateProjectionMatrix();resizeSurface();key.shadow.camera.top=height/2+400;key.shadow.camera.bottom=-height/2-400;key.shadow.camera.far=height+2200;key.shadow.camera.updateProjectionMatrix();if(box)box.position.y=-height/2+220;animation=null;cancelAnimationFrame(raf);finishAnimation?.();finishAnimation=null;rods.forEach(disposeRod);rods=strokes.map((s,i)=>makeRod(s,i,flavor));buildCrumbs();if(phase==='waiting')prepareBox();else if(phase==='opening'){phase='complete';settle();}crumbs.visible=receivedMode&&phase==='complete';draw();}
+ function update(strokes,flavor,height=1200){const k=JSON.stringify(strokes)+flavor+height;if(k===currentKey){draw();return;}currentKey=k;currentFlavor=flavor;sheetHeight=height;camera.top=frameHeight()/2;camera.bottom=-frameHeight()/2;camera.updateProjectionMatrix();resizeSurface();key.shadow.camera.top=height/2+400;key.shadow.camera.bottom=-height/2-400;key.shadow.camera.far=height+2200;key.shadow.camera.updateProjectionMatrix();if(box)box.position.y=-height/2+150;animation=null;cancelAnimationFrame(raf);finishAnimation?.();finishAnimation=null;rods.forEach(disposeRod);rods=strokes.map((s,i)=>makeRod(s,i,flavor));buildCrumbs();if(phase==='waiting')prepareBox();else if(phase==='opening'){phase='complete';settle();}crumbs.visible=receivedMode&&phase==='complete';draw();}
  function boxTexture(flavor,style=boxStyle,flat=true){
   const palette=BOX_STYLES[style]||BOX_STYLES.green;
   const c=document.createElement('canvas');c.width=768;c.height=1364;const p=c.getContext('2d'),rand=randomFor(710);
@@ -114,7 +114,7 @@ export function createScene(host,{introScale=3.05}={}){
   const hinge=new THREE.Group();hinge.position.set(0,122,-32);box.add(hinge);const lid=mesh(new THREE.BoxGeometry(138,65,2),paper,hinge);lid.position.y=32;hinge.rotation.x=-.65;box.userData.hinge=hinge;
   for(let i=0;i<4;i++){const g=new THREE.Group();const rod=mesh(new THREE.CylinderGeometry(4.5,4.5,110,10),mats[flavor],g);g.position.set(-42+i*27,130,-15+i%2*14);g.rotation.z=(i-1.5)*.08;box.add(g);box.userData.snacks.push(g);}
   decorateBox(box,boxStyle);
-  box.position.set(-400,-sheetHeight/2+220,45);box.rotation.set(.07,.08,-.18);scene.add(box);return box;
+  box.position.set(-400,-sheetHeight/2+150,45);box.rotation.set(.07,.08,-.18);scene.add(box);return box;
  }
  // A sparse, deterministic scatter stays with the letter through resize and replay.
  const crumbs=new THREE.Group();scene.add(crumbs);crumbs.visible=false;
@@ -146,7 +146,7 @@ export function createScene(host,{introScale=3.05}={}){
  function settle(){
   crumbs.visible=receivedMode&&phase==='complete';crumbs.children.forEach(c=>c.position.copy(c.userData.rest));
   rods.forEach(r=>{r.visible=true;r.position.copy(r.userData.target);r.quaternion.copy(r.userData.rotation);r.scale.setScalar(1);});
-  if(box){box.position.set(-400,-sheetHeight/2+220,45);box.scale.setScalar(1);box.rotation.set(.07,.08,-.18);box.userData.hinge.rotation.x=-.9;box.userData.snacks.forEach(r=>r.visible=true);}
+  if(box){box.position.set(-400,-sheetHeight/2+150,45);box.scale.setScalar(.72);box.rotation.set(.07,.08,-.18);box.userData.hinge.rotation.x=-.9;box.userData.snacks.forEach(r=>r.visible=true);}
   particles.forEach(p=>p.visible=false);trails.visible=false;
  }
  function setReceived(value){
@@ -158,11 +158,11 @@ export function createScene(host,{introScale=3.05}={}){
   if(phase==='opening')return Promise.resolve();cancelAnimationFrame(raf);phase='opening';camera.top=sheetHeight/2;camera.bottom=-sheetHeight/2;camera.updateProjectionMatrix();resizeSurface();
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){phase='complete';settle();draw();return Promise.resolve();}
   const start=performance.now(),stagger=Math.min(17,850/Math.max(1,rods.length)),duration=3300;
-  const origin=new THREE.Vector3(),destination=new THREE.Vector3(-400,-sheetHeight/2+220,45),initial=box.position.clone(),point=new THREE.Vector3();
+  const origin=new THREE.Vector3(),destination=new THREE.Vector3(-400,-sheetHeight/2+150,45),initial=box.position.clone(),point=new THREE.Vector3();
   function flight(r,i,t,out){const target=r.userData.target,side=i%2?1:-1,arc=Math.sin(Math.PI*t),ease=t*t*(3-2*t);out.lerpVectors(origin,target,ease);out.x+=arc*(side*(230+i%5*45)+Math.sin(t*Math.PI*2+i)*100);out.y+=arc*(220+(i%7)*28);out.z+=arc*(260+(i%6)*40);return out;}
   animation=true;return new Promise(resolve=>{finishAnimation=resolve;
    function tick(now){const elapsed=now-start,move=THREE.MathUtils.clamp((elapsed-260)/1050,0,1),ease=1-Math.pow(1-move,3);
-    box.position.lerpVectors(initial,destination,ease);box.position.z+=Math.sin(move*Math.PI)*170;box.scale.setScalar(introScale-(introScale-1)*ease+Math.sin(Math.min(1,elapsed/500)*Math.PI)*.18);box.rotation.set(.06+Math.sin(move*Math.PI)*.35,-.15+Math.sin(move*Math.PI)*.45,-.09-.09*ease+Math.sin(elapsed*.04)*.035*(1-ease));box.userData.hinge.rotation.x=Math.PI/2-(Math.PI/2+.9)*Math.min(1,elapsed/420);box.userData.snacks.forEach(r=>r.visible=elapsed>220);
+    box.position.lerpVectors(initial,destination,ease);box.position.z+=Math.sin(move*Math.PI)*170;box.scale.setScalar(introScale-(introScale-.72)*ease+Math.sin(Math.min(1,elapsed/500)*Math.PI)*.18);box.rotation.set(.06+Math.sin(move*Math.PI)*.35,-.15+Math.sin(move*Math.PI)*.45,-.09-.09*ease+Math.sin(elapsed*.04)*.035*(1-ease));box.userData.hinge.rotation.x=Math.PI/2-(Math.PI/2+.9)*Math.min(1,elapsed/420);box.userData.snacks.forEach(r=>r.visible=elapsed>220);
     box.updateMatrixWorld();origin.set(0,160,15).applyMatrix4(box.matrixWorld);
     const positions=trailGeometry.attributes.position.array;positions.fill(0);
     rods.forEach((r,i)=>{const delay=370+i*stagger,t=THREE.MathUtils.clamp((elapsed-delay)/1500,0,1);r.visible=elapsed>=delay;flight(r,i,t,r.position);r.quaternion.copy(r.userData.rotation);const spin=(1-t)*(1-t);r.rotateX(spin*(i%3+2)*Math.PI*2);r.rotateZ(spin*(i%2?1:-1)*Math.PI*4);r.scale.setScalar(1+Math.sin(t*Math.PI)*.28);if(i<24&&t>0&&t<.94){r.position.toArray(positions,i*6);flight(r,i,Math.max(0,t-.045),point).toArray(positions,i*6+3);}});
@@ -179,7 +179,7 @@ export function createScene(host,{introScale=3.05}={}){
  function pack(){
   stop();phase='packing';if(!box)createBox(currentFlavor);settle();
   camera.top=Math.max(600,sheetHeight/2);camera.bottom=-camera.top;camera.updateProjectionMatrix();
-  const start=performance.now(),origin=new THREE.Vector3(),initial=new THREE.Vector3(-400,-sheetHeight/2+220,45),end=new THREE.Vector3(0,35,32);
+  const start=performance.now(),origin=new THREE.Vector3(),initial=new THREE.Vector3(-400,-sheetHeight/2+150,45),end=new THREE.Vector3(0,35,32);
   function finish(){phase='waiting';prepareBox();draw();}
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return Promise.resolve();}
   return new Promise(resolve=>{finishAnimation=resolve;function tick(now){

@@ -133,3 +133,30 @@ window.addEventListener('resize',syncActionBar);
 document.addEventListener('focusin',syncActionBar);
 document.addEventListener('focusout',syncActionBar);
 syncActionBar();
+
+// Follow the edited line after the letter has grown and layout has settled.
+let caretFrame=0;
+function followWritingLine(){
+ cancelAnimationFrame(caretFrame);
+ caretFrame=requestAnimationFrame(()=>{
+  const input=$('#message');
+  if(document.body.classList.contains('received')||document.activeElement!==input||$('#package-dialog').open)return;
+  const position=input.selectionDirection==='backward'?input.selectionStart:input.selectionEnd;
+  const paragraphs=input.value.slice(0,position).split('\n');
+  const {columns,startY,lineHeight,size}=letterLayout;
+  let row=0;
+  for(let i=0;i<paragraphs.length-1;i++)row+=Math.max(1,Math.ceil(Array.from(paragraphs[i]).length/columns));
+  row+=Math.max(0,Math.ceil(Array.from(paragraphs.at(-1)).length/columns)-1);
+  const rect=canvas.getBoundingClientRect(),scale=rect.width/1200;
+  const lineTop=rect.top+(startY+row*lineHeight-size*.08)*scale;
+  const lineBottom=rect.top+(startY+row*lineHeight+size)*scale;
+  const visibleTop=(viewport?.offsetTop||0)+20;
+  const visibleBottom=Math.min((viewport?.offsetTop||0)+(viewport?.height||innerHeight),$('.studio>aside').getBoundingClientRect().top)-24;
+  if(visibleBottom<=visibleTop)return;
+  const delta=lineBottom>visibleBottom?lineBottom-visibleBottom:lineTop<visibleTop?lineTop-visibleTop:0;
+  if(Math.abs(delta)>1)window.scrollBy({top:delta,behavior:'instant'});
+ });
+}
+['input','keyup','click','compositionend','focus'].forEach(event=>$('#message').addEventListener(event,followWritingLine));
+viewport?.addEventListener('resize',followWritingLine);
+window.addEventListener('resize',followWritingLine);

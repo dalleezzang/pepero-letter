@@ -76,3 +76,10 @@ body.received.awaiting-letter{height:100svh;overflow:hidden}.received.awaiting-l
 /* Leave breathing room around the packaging dialog on narrow screens. */
 #package-dialog{width:min(680px,calc(100% - 32px));max-width:calc(100% - 32px);margin:auto;max-height:calc(100svh - 32px)}
 @media(max-width:480px){#package-dialog{padding:38px 14px 18px}.box-net{--net-w:clamp(88px,25vw,120px);--net-d:22px}#box-options{gap:5px}.box-choice{font-size:clamp(9px,2.5vw,11px)}.package-actions{gap:8px}}
+
+/* Reserve a separate row below the box canvas for the open button. */
+.received.awaiting-letter .preview-column{width:min(100%,calc(100svh - 156px));padding-bottom:60px}
+.received.awaiting-letter .card-wrap{overflow:visible}
+.awaiting-letter #open-letter{height:calc(100% + 60px)}
+.awaiting-letter #open-letter span{top:auto;bottom:0}
+@media(max-width:480px){.received.awaiting-letter .preview-column{width:min(100%,calc(100svh - 148px))}}

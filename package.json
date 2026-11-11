@@ -1,0 +1,18 @@
+{
+  "name": "pepero-studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "esbuild scene.js --bundle --format=esm --minify --outfile=scene.bundle.js",
+    "dev": "python3 -m http.server 5173 --bind 127.0.0.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "esbuild": "^0.28.2",
+    "three": "^0.187.0"
+  }
+}

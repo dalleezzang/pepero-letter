@@ -112,3 +112,24 @@ loadReceivedLetter();
 
 function artwork(){if(!view3D)return canvas;view3D.draw();const out=document.createElement('canvas');out.width=1200;out.height=canvas.height;const c=out.getContext('2d');c.drawImage(view3D.canvas,0,0,1200,canvas.height);c.textAlign='center';c.fillStyle='#9c7e64';c.font='19px sans-serif';if($('#to').value.trim())c.fillText('TO. '+$('#to').value.trim(),600,letterLayout.toY);if($('#from').value.trim())c.fillText('FROM. '+$('#from').value.trim(),600,letterLayout.fromY);return out;}
 
+
+$('#clear-message').onclick=()=>{if(document.body.classList.contains('received'))return;$('#message').value='';render();$('#message').focus({preventScroll:true});};
+// Keep mobile actions attached to the visible viewport above the keyboard.
+const viewport=window.visualViewport;
+let viewportFrame=0;
+function syncActionBar(){
+ cancelAnimationFrame(viewportFrame);
+ viewportFrame=requestAnimationFrame(()=>{
+  const editing=document.activeElement?.matches('input,textarea');
+  const keyboard=!!(viewport&&editing&&window.innerHeight-viewport.height>120);
+  document.body.classList.toggle('keyboard-open',keyboard);
+  const inset=keyboard?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+  document.documentElement.style.setProperty('--keyboard-inset',`${inset}px`);
+ });
+}
+viewport?.addEventListener('resize',syncActionBar);
+viewport?.addEventListener('scroll',syncActionBar);
+window.addEventListener('resize',syncActionBar);
+document.addEventListener('focusin',syncActionBar);
+document.addEventListener('focusout',syncActionBar);
+syncActionBar();

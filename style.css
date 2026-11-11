@@ -83,3 +83,13 @@ body.received.awaiting-letter{height:100svh;overflow:hidden}.received.awaiting-l
 .awaiting-letter #open-letter{height:calc(100% + 60px)}
 .awaiting-letter #open-letter span{top:auto;bottom:0}
 @media(max-width:480px){.received.awaiting-letter .preview-column{width:min(100%,calc(100svh - 148px))}}
+
+.clear-row{display:flex;justify-content:flex-end;margin-top:10px}
+#clear-message{border:0;background:none;padding:8px 2px;color:#8b7567;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+#clear-message:hover{color:var(--red)}
+.received .clear-row{display:none}
+@media(max-width:800px){
+ body:not(.received) .studio>aside{bottom:var(--keyboard-inset,0px);width:100%;max-width:none;border-radius:16px 16px 0 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-bottom:0}
+ body:not(.received).keyboard-open .studio>aside{padding-bottom:10px}
+ body:not(.received) #toast{bottom:calc(var(--keyboard-inset,0px) + 88px + env(safe-area-inset-bottom,0px))}
+}

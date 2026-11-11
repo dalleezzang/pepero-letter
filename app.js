@@ -49,6 +49,7 @@ $('#message').value='';['message','to','from'].forEach(id=>$('#'+id).addEventLis
 async function getFile(bare=false){if(!$('#message').value.trim()){toast('전하고 싶은 마음을 먼저 적어주세요.');$('#message').focus();return null;}const out=document.createElement('canvas');const packed=!bare && $('#package-dialog').open && $('#parcel').classList.contains('packed');out.width=1080;out.height=packed?1080:Math.round(1080*canvas.height/1200);if(packed)await drawPackage(out);else out.getContext('2d').drawImage(artwork(),0,0,out.width,out.height);const blob=await new Promise(r=>out.toBlob(r,'image/png'));if(!blob)throw Error('image');return new File([blob],!bare && $('#package-dialog').open && $('#parcel').classList.contains('packed')?'빼빼로-포장.png':'빼빼로-편지.png',{type:'image/png'});}
 function download(file){const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 $('#save').onclick=async()=>{try{const file=await getFile();if(file){download(file);toast('이미지를 저장했어요.');}}catch{toast('이미지를 저장하지 못했어요. 다시 시도해주세요.');}};
+$('#received-save').onclick=$('#save').onclick;
 function createShareURL(){const data={v:1,m:$('#message').value,f:state.flavor,w:state.wrap,b:state.box,t:$('#to').value,r:$('#from').value};const bytes=new TextEncoder().encode(JSON.stringify(data));let raw='';bytes.forEach(b=>raw+=String.fromCharCode(b));return location.origin+location.pathname+'#letter='+btoa(raw).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');}
 async function copyShareLink(){try{await navigator.clipboard.writeText($('#share-url').value);toast('공유 링크를 복사했어요.');}catch{$('#share-url').focus();$('#share-url').select();toast('링크를 선택했어요. 복사해서 보내주세요.');}}
 $('#copy-url').onclick=copyShareLink;
@@ -90,16 +91,16 @@ async function drawPackage(out){const picture=new Image();picture.src=view3D?.bo
 
 let flightTimer,flightRun=0;
 async function playLetter(){
- if(view3D){$('#replay').disabled=true;document.body.classList.remove('awaiting-letter');document.body.classList.add('opening-letter');await view3D.replay();document.body.classList.remove('opening-letter');$('#replay').disabled=false;return;}
+ if(view3D){$('#replay').disabled=true;$('#received-save').disabled=true;document.body.classList.remove('awaiting-letter');document.body.classList.add('opening-letter');await view3D.replay();document.body.classList.remove('opening-letter');$('#replay').disabled=false;$('#received-save').disabled=false;return;}
  document.body.classList.remove('awaiting-letter');
  const run=++flightRun;clearTimeout(flightTimer);const layer=$('#flight-layer'),card=$('.card-wrap');layer.replaceChildren();card.classList.remove('playing');
  captureSprites=true;sprites=[];render();captureSprites=false;
  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- card.classList.add('playing');$('#replay').disabled=true;
+ card.classList.add('playing');$('#replay').disabled=true;$('#received-save').disabled=true;
  const nodes=await Promise.all(sprites.map(async(s,i)=>{const img=new Image();img.src=s.src;img.className='flying-stick';img.style.left=s.left/12+'%';img.style.top=s.top/canvas.height*100+'%';img.style.width=s.width/12+'%';img.style.height=s.height/canvas.height*100+'%';const bx=150,by=canvas.height-200;
  img.style.setProperty('--dx',(bx-s.left)/s.width*100+'%');img.style.setProperty('--dy',(by-s.top)/s.height*100+'%');img.style.setProperty('--mx',((bx-s.left)*.45+(i%5-2)*35)/s.width*100+'%');img.style.setProperty('--my',((by-s.top)*.2-200-(i%7)*25)/s.height*100+'%');img.style.setProperty('--turn',((i%2?1:-1)*(120+i%8*45))+'deg');img.style.animationDelay=(.45+i*.014)+'s';await img.decode().catch(()=>{});return img;}));
  if(run!==flightRun)return;layer.replaceChildren(...nodes);
- flightTimer=setTimeout(()=>{if(run!==flightRun)return;card.classList.remove('playing');layer.replaceChildren();$('#replay').disabled=false;},1900+sprites.length*14);
+ flightTimer=setTimeout(()=>{if(run!==flightRun)return;card.classList.remove('playing');layer.replaceChildren();$('#replay').disabled=false;$('#received-save').disabled=false;},1900+sprites.length*14);
 }
 function prepareLetter(){document.body.classList.add('awaiting-letter');view3D?.setReceived(true);window.scrollTo({top:0,behavior:'instant'});}
 $('#open-letter').onclick=playLetter;
